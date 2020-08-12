@@ -31,7 +31,7 @@ func (e *Error) Code() int {
 	return e.code
 }
 
-func (e *Error) Msg() int {
+func (e *Error) Msg() string {
 	return e.msg
 }
 

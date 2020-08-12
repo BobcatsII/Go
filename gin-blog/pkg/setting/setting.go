@@ -1,0 +1,64 @@
+package setting
+
+import (
+	"github.com/spf13/viper"
+	"go/types"
+	"syscall"
+	"time"
+)
+
+type Setting struct {
+	vp *viper.Viper
+}
+
+//编写组件
+//初始化项目配置的基础属性
+func NewSetting() (*Setting, error) {
+	vp := viper.New()
+	vp.SetConfigName("config")
+	vp.AddConfigPath("configs/")
+	vp.SetConfigType("yaml")
+	err := vp.ReadConfig()
+	if err != nil {
+		return nil, err
+	}
+	return &Setting{vp}, nil
+}
+
+//配置属性的结构体
+type ServerSettingS struct {
+	RunMode      string
+	HttpPort     string
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
+}
+
+type AppSettingS struct {
+	DefaultPageSize int
+	MaxPageSize     int
+	LogSavePath     string
+	LogFileName     string
+	LogFileExt      string
+}
+
+type DatabaseSettingS struct {
+	DBType       string
+	Username     string
+	Password     string
+	Host         string
+	DBName       string
+	TablePrefix  string
+	Charset      string
+	ParseTime    bool
+	MaxIdleConns int
+	MaxOpenConns int
+}
+
+//读取区段配置的配置方法
+func (s *Setting) ReadSection(k string, v interface{}) error {
+	err := s.vp.UnmarshalKey(k, v)
+	if err != nil {
+		return err
+	}
+	return nil
+}
