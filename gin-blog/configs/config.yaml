@@ -18,7 +18,7 @@ App:
 Datebase:
   DBType: mysql
   Username: root
-  Password: rootroot
+  Password: hc2345678
   Host: 10.0.100.71:3307
   DBName: blog_service
   TablePrefix: blog_
