@@ -5,6 +5,7 @@ import (
 	"gin-blog/global"
 	"gin-blog/pkg/setting"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Model struct {
@@ -20,7 +21,7 @@ type Model struct {
 //新增NewDBEngine方法
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	db, err := gorm.Open(databaseSetting.DBType,
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t*loc=Local",
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=Local",
 			databaseSetting.Username,
 			databaseSetting.Password,
 			databaseSetting.Host,

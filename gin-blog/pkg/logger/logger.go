@@ -157,7 +157,7 @@ func (l *Logger) Output(message string) {
 
 //日志分级输出
 func (l *Logger) Debug(v ...interface{}) {
-	l.WithLevel(LevelDebug).Output(fmt.Sprintf(v...))
+	l.WithLevel(LevelDebug).Output(fmt.Sprint(v...))
 }
 
 func (l *Logger) Debugf(format string, v ...interface{}) {
@@ -165,11 +165,11 @@ func (l *Logger) Debugf(format string, v ...interface{}) {
 }
 
 func (l *Logger) Info(v ...interface{}) {
-	l.WithLevel(LevelInfo).Output(fmt.Sprintf(v...))
+	l.WithLevel(LevelInfo).Output(fmt.Sprint(v...))
 }
 
 func (l *Logger) Fatal(v ...interface{}) {
-	l.WithLevel(LevelFatal).Output(fmt.Sprintf(v...))
+	l.WithLevel(LevelFatal).Output(fmt.Sprint(v...))
 }
 
 func (l *Logger) Fatalf(format string, v ...interface{}) {

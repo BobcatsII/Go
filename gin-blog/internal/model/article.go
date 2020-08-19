@@ -1,5 +1,7 @@
 package model
 
+import "gin-blog/pkg/app"
+
 type Article struct {
 	*Model
 	Title         string `json:"title"`
@@ -9,6 +11,12 @@ type Article struct {
 	State         uint8  `json:"state"`
 }
 
+type ArticleSwagger struct {
+	List []*Article
+	Pager *app.Pager
+}
+
 func (a Article) TableName() string {
 	return "blog_article"
 }
+

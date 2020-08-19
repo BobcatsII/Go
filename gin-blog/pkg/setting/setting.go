@@ -2,9 +2,6 @@ package setting
 
 import (
 	"github.com/spf13/viper"
-	"go/types"
-	"syscall"
-	"time"
 )
 
 type Setting struct {
@@ -18,7 +15,7 @@ func NewSetting() (*Setting, error) {
 	vp.SetConfigName("config")
 	vp.AddConfigPath("configs/")
 	vp.SetConfigType("yaml")
-	err := vp.ReadConfig()
+	err := vp.ReadInConfig()
 	if err != nil {
 		return nil, err
 	}
