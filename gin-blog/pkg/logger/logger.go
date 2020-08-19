@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"gin-blog/pkg/app"
+	"github.com/gin-gonic/gin"
 	"io"
 	"log"
 	"runtime"
@@ -174,4 +176,8 @@ func (l *Logger) Fatal(v ...interface{}) {
 
 func (l *Logger) Fatalf(format string, v ...interface{}) {
 	l.WithLevel(LevelFatal).Output(fmt.Sprintf(format, v...))
+}
+
+func (l *Logger) Errorf(c *gin.Context, s string, errs app.ValidErrors) {
+	
 }

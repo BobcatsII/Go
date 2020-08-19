@@ -1,13 +1,13 @@
 package routers
 
 import (
+	"gin-blog/internal/middleware"
 	v1 "gin-blog/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
+
 	_ "gin-blog/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-
-
 )
 
 //路由管理
@@ -15,6 +15,8 @@ func NewRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	//新增Translations的注册
+	r.Use(middleware.Translations())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	tag := v1.NewTag()
@@ -37,3 +39,4 @@ func NewRouter() *gin.Engine {
 	}
 	return r
 }
+
