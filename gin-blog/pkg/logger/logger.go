@@ -178,6 +178,6 @@ func (l *Logger) Fatalf(format string, v ...interface{}) {
 	l.WithLevel(LevelFatal).Output(fmt.Sprintf(format, v...))
 }
 
-func (l *Logger) Errorf(c *gin.Context, s string, errs app.ValidErrors) {
+func (l *Logger) Errorf(c *gin.Context, s string, errs error) {
 	
 }
