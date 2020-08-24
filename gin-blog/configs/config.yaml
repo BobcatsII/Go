@@ -13,6 +13,14 @@ App:
   LogSavePath: storage/logs
   LogFileName: app
   LogFileExt: .log
+  #上传文件所需配置
+  UploadSavePath: storage/uploads
+  UploadServerUrl: http://127.0.0.1:8000/static
+  UploadImageMaxSize: 5  # MB
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
 
 #数据库配置：连接数据库的必须基础参数
 Datebase:
@@ -26,3 +34,9 @@ Datebase:
   ParseTime: True
   MaxIdleConns: 10
   MaxOpenConns: 30
+
+#写入JWT的配置项：
+JWT:
+  Secret: eddycjy
+  Issuer: blog-service
+  Expire: 7200

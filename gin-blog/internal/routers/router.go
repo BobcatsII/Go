@@ -1,9 +1,11 @@
 package routers
 
 import (
+	"gin-blog/global"
 	"gin-blog/internal/middleware"
 	v1 "gin-blog/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
+	"net/http"
 
 	_ "gin-blog/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -13,14 +15,23 @@ import (
 //路由管理
 func NewRouter() *gin.Engine {
 	r := gin.New()
+
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	//新增Translations的注册
 	r.Use(middleware.Translations())
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
+	upload := v1.NewUpload()
+
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.POST("/upload/file", upload.UploadFile)
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
+
+
+
 
 	apiv1 := r.Group("/api/v1")
 	{
