@@ -36,12 +36,12 @@ func NewRouter() *gin.Engine {
 		r.Use(middleware.Recovery())
 	}
 
+	//新增,将gin和Tracer衔接起来
+	r.Use(middleware.Tracing())
 	r.Use(middleware.RateLimiter(methodLimiters))
 	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
 	//新增Translations的注册
 	r.Use(middleware.Translations())
-	//新增,将gin和Tracer衔接起来
-	r.Use(middleware.Tracing())
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()

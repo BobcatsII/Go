@@ -26,7 +26,7 @@ App:
 Datebase:
   DBType: mysql
   Username: root
-  Password: hc2345678
+  Password: xxxxxxx
   Host: 10.0.100.71:3307
   DBName: blog_service
   TablePrefix: blog_
@@ -45,9 +45,9 @@ JWT:
 Email:
   Host: smtp.qq.com
   Port: 465
-  UserName: xxx
-  Password: xxx
+  UserName: 28399@qq.com
+  Password: txxj
   IsSSL: true
-  From: xxx
+  From: 28399@qq.com
   To:
-    - xxx
+    - 28399@qq.com

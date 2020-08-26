@@ -8,8 +8,8 @@ import (
 //本文件功能：错误处理
 
 type Error struct {
-	code int `json:"code"`
-	msg string `json:"msg"`
+	code    int      `json:"code"`
+	msg     string   `json:"msg"`
 	details []string `json:"details"`
 }
 
@@ -20,7 +20,7 @@ func NewError(code int, msg string) *Error {
 		panic(fmt.Sprintf("错误码 %d 已经存在， 请更换一个", code))
 	}
 	codes[code] = msg
-	return &Error{code:code, msg:msg}
+	return &Error{code: code, msg: msg}
 }
 
 func (e *Error) Error() string {
@@ -43,9 +43,9 @@ func (e *Error) Details() []string {
 	return e.details
 }
 
-func (e *Error) WithDetails(details ...string) *Error{
+func (e *Error) WithDetails(details ...string) *Error {
 	e.details = []string{}
-	for _,d := range details{
+	for _, d := range details {
 		e.details = append(e.details, d)
 	}
 	return e

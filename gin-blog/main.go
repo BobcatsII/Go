@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"gin-blog/global"
 	"gin-blog/internal/model"
@@ -8,11 +9,16 @@ import (
 	"gin-blog/pkg/logger"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/tracer"
+	"gin-blog/pkg/validator"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -28,7 +34,7 @@ var (
 func init() {
 	err := setupSetting()
 	if err != nil {
-		log.Fatal("init.setupSetting err: %v", err)
+		log.Fatalf("init.setupSetting err: %v", err)
 	}
 
 	err = setupDBEngine()
@@ -50,6 +56,11 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupFlag err: %v", err)
 	}
+
+	err = setupValidator()
+	if err != nil {
+		log.Fatalf("init.setupValidator err: %v", err)
+	}
 }
 
 // @title 博客系统
@@ -66,7 +77,29 @@ func main() {
 		WriteTimeout:   global.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-	s.ListenAndServe()
+	//添加协程
+	go func() {
+		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("s.ListenAndServe err: %v", err)
+		}
+	}()
+
+	//等待信号中断
+	quit := make(chan os.Signal)
+
+	//接收 syscall.SIGINT 和 syscall.SIGTERM 信号
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shuting down server...")
+
+	//最大时间控制，通知该服务端它有5s时间来处理原有的请求
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := s.Shutdown(ctx); err != nil {
+		log.Fatal("Server forced to shutdown:", err)
+	}
+
+	log.Println("Server exiting")
 }
 
 func setupSetting() error {
@@ -95,16 +128,25 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+
+	global.AppSetting.DefaultContextTimeout *= time.Second
+	global.JWTSetting.Expire *= time.Second
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
-	global.JWTSetting.Expire *= time.Second
-	global.AppSetting.DefaultContextTimeout *= time.Second
 	if port != "" {
 		global.ServerSetting.HttpPort = port
 	}
 	if runMode != "" {
 		global.ServerSetting.RunMode = runMode
 	}
+
+	return nil
+}
+
+func setupValidator() error {
+	global.Validator = validator.NewCustomValidator()
+	global.Validator.Engine()
+	binding.Validator = global.Validator
 
 	return nil
 }
