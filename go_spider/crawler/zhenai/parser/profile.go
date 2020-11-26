@@ -61,7 +61,6 @@ func parseJson(json []byte) model.Profile {
 	return profile
 }
 
-
 //////////////////////////////////////////////////////////
 // HTML正则方法，写在这里方便回顾，重点是方法
 //var ageRe = regexp.MustCompile(

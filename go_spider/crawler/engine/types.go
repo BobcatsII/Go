@@ -11,6 +11,6 @@ type ParseResult struct {
 }
 
 //定义一个空parser,占空位
-func NilParser([]byte) ParseResult{
+func NilParser([]byte) ParseResult {
 	return ParseResult{}
 }
