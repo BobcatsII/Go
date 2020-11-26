@@ -13,10 +13,13 @@ import (
 )
 
 func Fetch(url string) ([]byte, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		panic(err)
-	}
+	//resp, err := http.Get(url)
+	//if err != nil {
+	//	panic(err)
+	//}
+	request, _ := http.NewRequest(http.MethodGet, url, nil)
+	request.Header.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36")
+	resp, _ := http.DefaultClient.Do(request)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		return nil,

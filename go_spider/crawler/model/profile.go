@@ -1,22 +1,17 @@
 package model
 
 type Profile struct {
-	Name string
-	Gender string
-	Age string
-	Constellation string
-	Height string
-	Weight string
-	Workplace string
-	Income string
-	Education string
-	Nation string
-	Hometown string
-	Habit string
-	Stayroom string
-	Car string
-	Children string
-	Doyouwantchildren string
-	Whenmarried string
+	Name       string //姓名
+	Marriage   string //婚况
+	Age        string //年龄
+	Gender     string //性别
+	Height     string //身高
+	Weight     string //体重
+	Income     string //收入
+	Education  string //教育
+	Occupation string //职业
+	Hukou      string //籍贯户口
+	Xingzuo    string //星座
+	House      string //房子
+	Car        string //车
 }
-

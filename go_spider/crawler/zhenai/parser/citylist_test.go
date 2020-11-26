@@ -20,9 +20,9 @@ func TestParseCityList(t *testing.T) {
 		"http://www.zhenai.com/zhenghun/cangzhou",
 	}
 	expectedCities := []string{
-		"阿坝",
-		"白城",
-		"沧州",
+		"City: 阿坝",
+		"City: 白城",
+		"City: 沧州",
 	}
 	//验证URL的个数、前三个URL的正确性
 	if len(result.Requests) != resultSize {
