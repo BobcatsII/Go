@@ -19,6 +19,7 @@ func ParseCityList(contents []byte) engine.ParseResult {
 			Url:        string(m[1]),
 			ParserFunc: ParseCity,
 		})
+		//太多了，不方便查看效果，弄1个城市就行了
 		i++
 		if i == 1 {
 			break
