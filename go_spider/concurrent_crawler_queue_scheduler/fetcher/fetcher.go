@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-//速率限制器,防止请求过快
+//速率限制器[防止请求过快]
 var rateLimiter = time.Tick(100 * time.Millisecond)
 
 func Fetch(url string) ([]byte, error) {
@@ -23,8 +23,8 @@ func Fetch(url string) ([]byte, error) {
 	resp, _ := http.DefaultClient.Do(request)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil,
-			fmt.Errorf("worng status code: %d", resp.StatusCode)
+		//fmt.Println("Error: status code", resp.StatusCode)
+		return nil, fmt.Errorf("wrong status code: %d",resp.StatusCode)
 	}
 
 	//带入 resp.Body 的值，调用解码函数
