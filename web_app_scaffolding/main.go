@@ -27,20 +27,20 @@ func main() {
 	}
 
 	//2.初始化日志
-	if err := logger.Init(); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig); err != nil {
 		fmt.Printf("init logger failed, err:%v", err)
 	}
 	defer zap.L().Sync() //把缓冲区的日志追加到日志文件中
 	zap.L().Debug("logger init success...")
 
 	//3.初始化MySQL
-	if err := mysql.Init(); err != nil {
+	if err := mysql.Init(settings.Conf.MySQLConfig); err != nil {
 		fmt.Printf("init mysql failed, err:%v", err)
 	}
 	defer mysql.Close()
 
 	//4.初始化Redis
-	if err := redis.Init(); err != nil {
+	if err := redis.Init(settings.Conf.RedisConfig); err != nil {
 		fmt.Printf("init redis failed, err:%v", err)
 	}
 	defer redis.Close()
