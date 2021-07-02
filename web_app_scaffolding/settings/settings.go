@@ -11,10 +11,11 @@ import (
 var Conf = new(AppConfig) //指针，所以当下面反序列化更改都会同步，程序里马上就能知道最新的变量是什么
 
 type AppConfig struct {
-	Name         string `mapstructure:"name"`
-	Mode         string `mapstructure:"mode"`
-	Version      string `mapstructure:"version"`
-	Port         int    `mapstructure:"port"`
+	Name    string `mapstructure:"name"`
+	Mode    string `mapstructure:"mode"`
+	Version string `mapstructure:"version"`
+	Port    int    `mapstructure:"port"`
+
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
@@ -47,11 +48,19 @@ type RedisConfig struct {
 }
 
 func Init() (err error) {
+	//方式1: 直接指定配置文件路径（相对或绝对路径）
+	//相对路径: 相对要执行的可执行文件的相对路径；绝对路径: 系统中实际的文件路径
+	//viper.SetConfigFile("./conf/config.yaml")
+
+	//方式2: 指定配置文件名和配置文件位置，viper自行查找可用的配置文件
+	//注意: ①配置文件名不需要带后缀; ②配置文件路径可配置多个，多写几行AddConfigPath
 	viper.SetConfigName("config") //指定配置文件名(不需要带后缀)
-	viper.SetConfigType("yaml")   //指定配置文件类型（专用于从远程获取配置信息时指定配置文件类型的）
-	//viper.SetConfigFile("config.yaml") //也可以使用这种方式
-	viper.AddConfigPath("./settings") //指定查找配置文件的路径(相对路径)
-	err = viper.ReadInConfig()        //读取配置信息
+	viper.AddConfigPath("./conf") //指定查找配置文件的路径(相对路径)
+
+	//另外，下面的配置是配合远程配置中心使用的，告诉viper当前数据使用什么格式去解析
+	//viper.SetConfigType("yaml")   //专用于从远程获取配置信息时指定配置文件类型的
+
+	err = viper.ReadInConfig() //读取配置信息
 	if err != nil {
 		fmt.Printf("viper.ReadInConfig() failed , err:%v", err)
 		return
@@ -60,8 +69,8 @@ func Init() (err error) {
 	if err := viper.Unmarshal(Conf); err != nil {
 		fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
 	}
-	viper.WatchConfig() //支持配置自动热加载信息
-	viper.OnConfigChange(func(in fsnotify.Event) {
+	viper.WatchConfig()                            //支持配置自动热加载信息
+	viper.OnConfigChange(func(in fsnotify.Event) { //回调机制
 		fmt.Println("配置文件修改了...")
 		//这里在执行以下反序列化操作，把最新的配置文件也序列化到 Conf 变量里面去
 		if err := viper.Unmarshal(Conf); err != nil {
